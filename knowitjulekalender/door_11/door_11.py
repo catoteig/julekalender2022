@@ -38,8 +38,7 @@ def remove_paritybits(matrix, paritybits):
 def find_reminder(failed, passed, n):
     failed_intersection = set.intersection(*map(set, failed)) if failed else {}
     passed_flattened = {i for lst in passed for i in lst}
-
-    return list(failed_intersection - passed_flattened - {2**n for n in range(n)})[0]
+    return list(failed_intersection - passed_flattened)[0]
 
 
 def main():
