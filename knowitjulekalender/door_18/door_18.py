@@ -2,7 +2,6 @@ import knowitjulekalender.door_11.door_11 as door_11
 
 
 def bits2string(bits):
-    print(f'Converting: {bits}')
     n = int(bits, 2)
     return n.to_bytes((n.bit_length() + 7) // 8, 'little').decode('ascii')
 
@@ -14,10 +13,10 @@ def main():
     n = 5
     paritybits = [2 ** n for n in range(n)]
     datablocks = [nisse_safe[datapart:datapart + 2 ** n] for datapart in range(0, len(nisse_safe), 2 ** n)]
+    encoded_blocks = ''
     encoded_text = ''
 
     for data in datablocks:
-
         datablock = [int(_) for _ in data]
         failed_parities, passed_parities = [], []
 
@@ -35,13 +34,12 @@ def main():
             datablock[reminder] = 0 if datablock[reminder] == 1 else 1
 
         encoded_data = door_11.remove_paritybits(datablock, paritybits)
-        encoded_data_string = ''.join([str(_) for _ in encoded_data])
+        encoded_blocks += ''.join([str(_) for _ in encoded_data])
 
-        for bit in range(0, 24, 8):
-            print(encoded_data_string[bit+1:bit + 8] + " :: " + bits2string(encoded_data_string[bit+1:bit + 8]))
-            encoded_text += bits2string(encoded_data_string[bit+1:bit + 8])
+    for bit in range(0, len(encoded_blocks)-8, 8):
+        encoded_text += bits2string(encoded_blocks[bit:bit+8])
 
-    print(f'Encoded text: {encoded_text}')  # IS WRONG!!!!
+    print(encoded_text)
 
 
 if __name__ == '__main__':
